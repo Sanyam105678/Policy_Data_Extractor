@@ -1,0 +1,25 @@
+{% load basename %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Policy Details Extraction</title>
+</head>
+<body>
+
+<h2>Policy System</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="">Select Company Name:</label>
+    {{ form.insurance_company }} <br><br>
+
+    <label for="">Drop Policy Zip(Only Zip Files):</label>
+    {{ form.zip_file }} <br><br>
+
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>
+

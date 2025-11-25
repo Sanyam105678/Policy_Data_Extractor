@@ -1,0 +1,73 @@
+{% load basename %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-3">Policy Documents Processing Using OCR System</h2>
+    <hr>
+
+    {% if zip_errors %}
+    <div class="alert alert-danger">
+        <strong>ZIP Errors:</strong>
+        <ul>
+            {% for err in zip_errors %}
+            <li>{{ err }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+  
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>File Name</th>
+                <th>Status</th>
+                <th>Preview Extracted Text Data</th>
+                <th>Download Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in ocr_results %}
+            <tr>
+                <td>{{ r.pdf|basename }}</td>
+
+                <td>
+                    {% if r.errors %}
+                    <span class="badge bg-danger">Failed</span>
+                    {% else %}
+                    <span class="badge bg-success">Success</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% comment %} <button class="btn btn-sm btn-primary" data-bs-toggle="collapse"
+                        data-bs-target="#txt{{ forloop.counter }}">
+                        View OCR Text
+                    </button> {% endcomment %}
+
+                    <div id="txt{{ forloop.counter }}" class="collapse mt-2">
+                        <div class="card card-body" style="max-height:250px; overflow-y:auto;">
+                            <pre>{{ r.text }}</pre>
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    {% if r.log_file %}
+                    <a href="{% url 'download_log' r.log_file %}" download class="btn btn-sm btn-secondary">
+                        Download Data
+                    </a>
+                    {% else %}
+                    <span class="text-muted">No log</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'upload_policy' %}" class="btn btn-success mt-3">Upload Zip Again</a>
+</div>
+{% endblock %}
+
